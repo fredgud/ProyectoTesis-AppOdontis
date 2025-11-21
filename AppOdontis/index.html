@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ODONTIS - Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Fuente Profesional -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="login-container">
+  <div class="card">
+
+    <img src="logo.png" class="logo" alt="Logo ODONTIS">
+
+    <h2>ODONTIS</h2>
+    <p class="subtitle">Gestión de Citas Dentales</p>
+
+    <input type="text" id="usuario" placeholder="Usuario">
+    <input type="password" id="clave" placeholder="Contraseña">
+
+    <button class="login-btn" onclick="login()">Ingresar</button>
+
+    <p class="footer-text">Clínica Dental - Sonrisas de Confianza</p>
+  </div>
+</div>
+
+<script>
+function login(){
+  let u = document.getElementById("usuario").value;
+  let c = document.getElementById("clave").value;
+
+  if(u === "admin" && c === "12345"){
+    window.location.href = "menu.html";
+  } else {
+    alert("Usuario o contraseña incorrectos");
+  }
+}
+</script>
+
+</body>
+</html>

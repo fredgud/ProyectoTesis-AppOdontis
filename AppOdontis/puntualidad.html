@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registrar Puntualidad</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="card">
+  <h2>Puntualidad</h2>
+  <div id="lista"></div>
+  <button onclick="location.href='menu.html'">Volver</button>
+</div>
+
+<script>
+function cargar(){
+  let citas = JSON.parse(localStorage.getItem("citas")) || [];
+  let lista = document.getElementById("lista");
+  lista.innerHTML = "";
+
+  citas.forEach((c, i) => {
+    lista.innerHTML += `
+      <p>⏱ ${c.fecha} - ${c.hora} → ${c.nombre}</p>
+      <button onclick="puntual(${i})">Llegó puntual</button>
+      <button onclick="tarde(${i})" style="background:orange;">Llegó tarde</button>
+      <hr>
+    `;
+  });
+}
+
+function puntual(i){
+  let citas = JSON.parse(localStorage.getItem("citas")) || [];
+  citas[i].puntualidad = "Puntual";
+  localStorage.setItem("citas", JSON.stringify(citas));
+  cargar();
+}
+
+function tarde(i){
+  let citas = JSON.parse(localStorage.getItem("citas")) || [];
+  citas[i].puntualidad = "Tarde";
+  localStorage.setItem("citas", JSON.stringify(citas));
+  cargar();
+}
+
+cargar();
+</script>
+
+</body>
+</html>

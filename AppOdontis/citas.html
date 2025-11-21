@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Citas Programadas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="card">
+  <h2>Citas Programadas</h2>
+
+  <div id="lista" class="lista-citas"></div>
+
+  <button class="secondary-btn" onclick="location.href='menu.html'">Volver</button>
+</div>
+
+<script>
+// Reemplaza con tu URL de Apps Script /exec
+const URL_WEB_APP = "https://script.google.com/macros/s/AKfycbxmUWO0-DpdMbBB8uRq_iC4Ej8ZwjVQ5ABzZW71KYpZCDhnSfcIb-U4s_n9dSLxmnTmFA/exec";
+
+function cargar(){
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "<p>Cargando citas...</p>";
+
+  fetch(URL_WEB_APP)
+    .then(response => response.json())
+    .then(data => {
+      lista.innerHTML = "";
+      if(data.result === "success") {
+        if(data.citas.length === 0){
+          lista.innerHTML = "<p class='vacio'>No hay citas registradas.</p>";
+          return;
+        }
+
+        data.citas.forEach((c, index) => {
+          lista.innerHTML += `
+            <div class="cita-card">
+              <div>
+                <strong>${c.nombre}</strong><br>
+                <span>📅 ${c.fecha} | ⏰ ${c.hora}</span><br>
+                <span>Asistencia: ${c.asistencia || "—"} | Puntualidad: ${c.puntualidad || "—"}</span>
+              </div>
+              <button class="delete-btn" onclick="eliminar(${index})">Eliminar</button>
+            </div>
+          `;
+        });
+      } else {
+        lista.innerHTML = `<p class='vacio'>Error al cargar citas: ${data.message}</p>`;
+      }
+    })
+    .catch(error => {
+      lista.innerHTML = `<p class='vacio'>Error de conexión: ${error}</p>`;
+    });
+}
+
+// Función para eliminar una cita
+function eliminar(index){
+  // Confirmamos con el usuario
+  if(!confirm("¿Deseas eliminar esta cita?")) return;
+
+  fetch(URL_WEB_APP + "?delete=" + index, { method: "POST" })
+    .then(response => response.json())
+    .then(data => {
+      if(data.result === "success") {
+        alert("Cita eliminada.");
+        cargar();
+      } else {
+        alert("Error al eliminar: " + data.message);
+      }
+    })
+    .catch(error => alert("Error de conexión: " + error));
+}
+
+cargar();
+</script>
+
+</body>
+</html>

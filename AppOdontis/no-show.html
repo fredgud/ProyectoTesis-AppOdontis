@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registrar Asistencia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="card">
+  <h2>Asistencia de Citas</h2>
+
+  <div id="lista" class="lista-citas"></div>
+
+  <button class="secondary-btn" onclick="location.href='menu.html'">Volver</button>
+</div>
+
+<script>
+function cargar(){
+  let citas = JSON.parse(localStorage.getItem("citas")) || [];
+  let lista = document.getElementById("lista");
+  lista.innerHTML = "";
+
+  if(citas.length === 0){
+    lista.innerHTML = "<p class='vacio'>No hay citas registradas.</p>";
+    return;
+  }
+
+  citas.forEach((c, i) => {
+    lista.innerHTML += `
+      <div class="cita-card">
+        <div>
+          <strong>${c.nombre}</strong><br>
+          <span>📅 ${c.fecha} | ⏰ ${c.hora}</span><br>
+          <small class="estado">${c.asistencia ? `Estado: ${c.asistencia}` : "Sin registrar"}</small>
+        </div>
+
+        <div class="btn-group">
+          <button class="success-btn" onclick="asistio(${i})">Asistió</button>
+          <button class="danger-btn" onclick="noAsistio(${i})">No asistió</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function asistio(i){
+  let citas = JSON.parse(localStorage.getItem("citas"));
+  citas[i].asistencia = "Asistió";
+  localStorage.setItem("citas", JSON.stringify(citas));
+  cargar();
+}
+
+function noAsistio(i){
+  let citas = JSON.parse(localStorage.getItem("citas"));
+  citas[i].asistencia = "No asistió";
+  localStorage.setItem("citas", JSON.stringify(citas));
+  cargar();
+}
+
+cargar();
+</script>
+
+</body>
+</html>
